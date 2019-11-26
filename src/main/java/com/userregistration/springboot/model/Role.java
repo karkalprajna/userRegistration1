@@ -1,11 +1,17 @@
 package com.userregistration.springboot.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "role")
@@ -16,6 +22,10 @@ public class Role {
 
     @Column(name = "name")
     private String name;
+    
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private Set<User> users;
 
     public Long getId() {
         return id;
@@ -31,6 +41,15 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+    @JsonIgnore
+    @JsonProperty(value = "users")
+    public Set<User> getUsers() {
+        return users;
+    }
+    @JsonIgnore
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
 }

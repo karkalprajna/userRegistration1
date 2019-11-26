@@ -1,8 +1,10 @@
 package com.userregistration.springboot.service;
 
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,27 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findByUsername(String username) {
-		return userRepository.findByUsername(username);
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException(username);
+	    }
+		return user;
+	}
+	
+	@Override
+	public String forgotpassword(String userName) {
+		User user = userRepository.findByUsername(userName);
+		if (user == null) {
+			throw new UsernameNotFoundException(userName);
+	    }
+		String token = UUID.randomUUID().toString();
+		createPasswordResetTokenForUser(user,token);
+		return token;
+	}
+	
+	public void createPasswordResetTokenForUser(User user, String token) {
+		user.setPassword(bCryptPasswordEncoder.encode(token));
+		userRepository.save(user);
 	}
 
 }

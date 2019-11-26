@@ -2,6 +2,8 @@ package com.userregistration.springboot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,19 +42,27 @@ public class UserController {
 	@GetMapping("/login")
 	public String login(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password) {
-
-		return securityService.login(username, password).toString();
+		UsernamePasswordAuthenticationToken login = securityService.login(username, password);
+		if(login.isAuthenticated()) {
+			return "login sucessful";
+		}else {
+			return "login failure";
+		}
 	}
 
 	// logout
 	@GetMapping("/logout")
 	public String logout() {
-		// sessionStorage.removeItem('username');
-		return "loged out";
-
+		SecurityContextHolder.getContext().setAuthentication(null);
+		return "loged out!";
 	}
 
 	// forgot password
+	@PostMapping("/forgotpassword")
+	public ResponseEntity<String> forgotPassword(@RequestBody User user){
+		return ResponseEntity.ok().body(userService.forgotpassword(user.getUsername()));
+	}
+	
 	// after login we should be able to go get registered user details , how to
 	// access the end point only after login.
 	@GetMapping("/registration/{username}")

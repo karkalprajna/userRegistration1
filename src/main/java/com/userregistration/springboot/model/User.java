@@ -11,20 +11,26 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username",unique = true)
+    @NotEmpty(message = "Please provide a user name")
     private String username;
 
     @Column(name = "password")
+    @NotEmpty(message = "Please provide a password")
     private String password;
     
     @Column(name = "emailId")
@@ -57,7 +63,8 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
+    @JsonIgnore
+    @JsonProperty(value = "password")
     public String getPassword() {
         return password;
     }
@@ -65,7 +72,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    
+    @JsonIgnore
+    @JsonProperty(value = "password")
     public String getPasswordConfirm() {
         return passwordConfirm;
     }
