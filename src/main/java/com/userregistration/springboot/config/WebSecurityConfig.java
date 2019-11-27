@@ -12,6 +12,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.userregistration.springboot.service.RoleService;
+import com.userregistration.springboot.service.RoleServiceImpl;
+import com.userregistration.springboot.service.SecurityService;
+import com.userregistration.springboot.service.SecurityServiceImpl;
+import com.userregistration.springboot.service.UserService;
+import com.userregistration.springboot.service.UserServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -23,6 +30,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}
 	
+	
+	@Bean
+	public UserDetailsService userDetailsService() {
+		return super.userDetailsService();
+	}
+
+	/*
+	 * @Bean public RoleService roleService() { return new RoleServiceImpl(); }
+	 * 
+	 * @Bean public SecurityService securityService() { return new
+	 * SecurityServiceImpl(); }
+	 */
+	 
+	
+	/*
+	 * @Bean public UserService userService() { return new UserServiceImpl(); }
+	 */
 	/*
 	 * @Override protected void configure(AuthenticationManagerBuilder auth) throws
 	 * Exception { auth.inMemoryAuthentication().withUser("admin").password(

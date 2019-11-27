@@ -1,6 +1,7 @@
 package com.userregistration.springboot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,7 +37,8 @@ public class UserController {
 
 	@PostMapping("/registration")
 	public ResponseEntity<User> createUser(@RequestBody User user) { 
-		return ResponseEntity.ok().body(userService.save(user));
+		//return ResponseEntity.ok().body(userService.save(user));
+		return new ResponseEntity<User>(userService.save(user),HttpStatus.CREATED);
 	}
 
 	@GetMapping("/login")
